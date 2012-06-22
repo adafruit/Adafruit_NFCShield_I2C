@@ -176,7 +176,7 @@ void Adafruit_NFCShield_I2C::PrintHexChar(const byte * data, const uint32_t numB
     if (data[szPos] <= 0x1F)
       Serial.print(".");
     else
-      Serial.print(data[szPos]);
+      Serial.print((char)data[szPos]);
   }
   Serial.println("");
 }
