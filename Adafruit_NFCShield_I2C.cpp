@@ -19,6 +19,8 @@
 
 	@section  HISTORY
 
+    v1.4 - Added setPassiveActivationRetries()
+	
     v1.3 - Modified to work with I2C
 	
     v1.2 - Added writeGPIO()
@@ -392,6 +394,33 @@ boolean Adafruit_NFCShield_I2C::SAMConfig(void) {
   wirereaddata(pn532_packetbuffer, 8);
   
   return  (pn532_packetbuffer[6] == 0x15);
+}
+
+/**************************************************************************/
+/*! 
+    Sets the MxRtyPassiveActivation byte of the RFConfiguration register
+    
+    @param  maxRetries    0xFF to wait forever, 0x00..0xFE to timeout
+                          after mxRetries
+    
+    @returns 1 if everything executed properly, 0 for an error
+*/
+/**************************************************************************/
+boolean Adafruit_NFCShield_I2C::setPassiveActivationRetries(uint8_t maxRetries) {
+  pn532_packetbuffer[0] = PN532_COMMAND_RFCONFIGURATION;
+  pn532_packetbuffer[1] = 5;    // Config item 5 (MaxRetries)
+  pn532_packetbuffer[2] = 0xFF; // MxRtyATR (default = 0xFF)
+  pn532_packetbuffer[3] = 0x01; // MxRtyPSL (default = 0x01)
+  pn532_packetbuffer[4] = maxRetries;
+
+#ifdef MIFAREDEBUG
+  Serial.print("Setting MxRtyPassiveActivation to "); Serial.print(maxRetries, DEC); Serial.println(" ");
+#endif
+  
+  if (! sendCommandCheckAck(pn532_packetbuffer, 5))
+    return 0x0;  // no ACK
+  
+  return 1;
 }
 
 /***** ISO14443A Commands ******/
