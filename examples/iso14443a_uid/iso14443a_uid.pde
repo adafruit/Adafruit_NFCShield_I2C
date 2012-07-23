@@ -49,6 +49,11 @@ void setup(void) {
   Serial.print("Firmware ver. "); Serial.print((versiondata>>16) & 0xFF, DEC); 
   Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
   
+  // Set the max number of retry attempts to read from a card
+  // This prevents us from waiting forever for a card, which is
+  // the default behaviour of the PN532.
+  nfc.setPassiveActivationRetries(0xFF);
+  
   // configure board to read RFID tags
   nfc.SAMConfig();
     
@@ -76,5 +81,10 @@ void loop(void) {
     Serial.println("");
     // Wait 1 second before continuing
     delay(1000);
+  }
+  else
+  {
+    // PN532 probably timed out waiting for a card
+    Serial.println("Timed out waiting for a card");
   }
 }
