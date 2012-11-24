@@ -42,7 +42,7 @@
 Adafruit_NFCShield_I2C nfc(IRQ, RESET);
 
 void setup(void) {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Hello!");
 
   nfc.begin();
