@@ -174,4 +174,7 @@ void loop(void) {
   
   // Wait a bit before trying again
   Serial.println("\n\nDone!");
+  delay(1000);
+  Serial.flush();
+  while(Serial.available()) Serial.read();
 }
