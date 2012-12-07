@@ -1038,6 +1038,13 @@ void Adafruit_NFCShield_I2C::wiresendcommand(uint8_t* cmd, uint8_t cmdlen) {
 #endif
 } 
 
+/**************************************************************************/
+/*! 
+    @brief  Waits until the PN532 is ready.
+
+    @param  timeout   Timeout before giving up
+*/
+/**************************************************************************/
 boolean Adafruit_NFCShield_I2C::waitUntilReady(uint16_t timeout) {
   uint16_t timer = 0;
   while(wirereadstatus() != PN532_I2C_READY) {
@@ -1052,6 +1059,16 @@ boolean Adafruit_NFCShield_I2C::waitUntilReady(uint16_t timeout) {
   return true;
 }
 
+/**************************************************************************/
+/*! 
+    @brief  Exchanges an APDU with the currently inlisted peer
+
+    @param  send            Pointer to data to send
+    @param  sendLength      Length of the data to send
+    @param  response        Pointer to response data
+    @param  responseLength  Pointer to the response data length
+*/
+/**************************************************************************/
 boolean Adafruit_NFCShield_I2C::inDataExchange(uint8_t * send, uint8_t sendLength, uint8_t * response, uint8_t * responseLength) {
   if (sendLength > PN532_PACKBUFFSIZ -2) {
     #ifdef PN532DEBUG
@@ -1126,6 +1143,12 @@ boolean Adafruit_NFCShield_I2C::inDataExchange(uint8_t * send, uint8_t sendLengt
   }
 }
 
+/**************************************************************************/
+/*! 
+    @brief  'InLists' a passive target. PN532 acting as reader/initiator,
+            peer acting as card/responder.
+*/
+/**************************************************************************/
 boolean Adafruit_NFCShield_I2C::inListPassiveTarget() {
   pn532_packetbuffer[0] = PN532_COMMAND_INLISTPASSIVETARGET;
   pn532_packetbuffer[1] = 1;
