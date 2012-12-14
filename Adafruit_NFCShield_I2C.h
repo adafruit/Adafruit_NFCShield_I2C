@@ -40,6 +40,7 @@
 #define PN532_POSTAMBLE                     (0x00)
 
 #define PN532_HOSTTOPN532                   (0xD4)
+#define PN532_PN532TOHOST                   (0xD5)
 
 // PN532 Commands
 #define PN532_COMMAND_DIAGNOSE              (0x00)
@@ -74,6 +75,10 @@
 #define PN532_COMMAND_TGGETINITIATORCOMMAND (0x88)
 #define PN532_COMMAND_TGRESPONSETOINITIATOR (0x90)
 #define PN532_COMMAND_TGGETTARGETSTATUS     (0x8A)
+
+#define PN532_RESPONSE_INDATAEXCHANGE       (0x41)
+#define PN532_RESPONSE_INLISTPASSIVETARGET  (0x4B)
+
 
 #define PN532_WAKEUP                        (0x55)
 
@@ -160,7 +165,9 @@ class Adafruit_NFCShield_I2C{
   boolean setPassiveActivationRetries(uint8_t maxRetries);
   
   // ISO14443A functions
+  boolean inListPassiveTarget();
   boolean readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint8_t * uidLength);
+  boolean inDataExchange(uint8_t * send, uint8_t sendLength, uint8_t * response, uint8_t * responseLength);
   
   // Mifare Classic functions
   bool mifareclassic_IsFirstBlock (uint32_t uiBlock);
@@ -183,9 +190,11 @@ class Adafruit_NFCShield_I2C{
   uint8_t _uid[7];  // ISO14443A uid
   uint8_t _uidLen;  // uid len
   uint8_t _key[6];  // Mifare Classic key
+  uint8_t inListedTag; // Tg number of inlisted tag.
 
   boolean readackframe(void);
   uint8_t wirereadstatus(void);
   void    wirereaddata(uint8_t* buff, uint8_t n);
   void    wiresendcommand(uint8_t* cmd, uint8_t cmdlen);
+  boolean waitUntilReady(uint16_t timeout);
 };
