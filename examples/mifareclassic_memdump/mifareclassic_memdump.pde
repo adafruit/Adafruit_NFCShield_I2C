@@ -198,5 +198,8 @@ void loop(void) {
   Serial.println("\n\nSend a character to run the mem dumper again!");
   Serial.flush();
   while (!Serial.available());
+  while (Serial.available()) {
+	Serial.read();
+  }
   Serial.flush();
 }
