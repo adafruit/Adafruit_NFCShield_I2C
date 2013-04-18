@@ -36,7 +36,7 @@ Adafruit_NFCShield_I2C nfc(IRQ, RESET);
     prefixes! 
 */
 // For a http://www. url:
-const char * url = "google.com";
+const char * url = "adafruit.com/blog/";
 uint8_t ndefprefix = NDEF_URIPREFIX_HTTP_WWWDOT;
 
 // for an email address
@@ -135,44 +135,14 @@ void loop(void) {
       return;
     }
     
-    Serial.println("Updating sector 1 with URI as NDEF Message");    
+    Serial.println("Updating sector 1 with URI as NDEF Message");
     
     // URI is within size limits ... write it to the card and report success/failure
     success = nfc.mifareclassic_WriteNDEFURI(1, ndefprefix, url);
     if (success)
     {
       Serial.println("NDEF URI Record written to sector 1");
-      Serial.println("");
-      
-      // Dump the data for debugging purposes
-      uint8_t data[16];
-      uint8_t currentblock;
-      for (currentblock = 4; currentblock < 8; currentblock++)
-      {
-        // Authenticated ... we should be able to read the block now
-        // Dump the data into the 'data' array
-        success = nfc.mifareclassic_ReadDataBlock(currentblock, data);
-        if (success)
-        {
-          // Read successful
-          Serial.print("Block ");Serial.print(currentblock, DEC);
-          if (currentblock < 10)
-          {
-            Serial.print("  ");
-          }
-          else
-          {
-            Serial.print(" ");
-          }
-          // Dump the raw data
-          nfc.PrintHexChar(data, 16);
-        }
-        else
-        {
-          Serial.println("Unable to read back the contents of block "); Serial.println(currentblock, DEC);
-        }
-        Serial.println("");
-      }
+      Serial.println("");      
     }
     else
     {
