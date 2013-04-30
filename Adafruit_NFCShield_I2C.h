@@ -26,6 +26,9 @@
 */
 /**************************************************************************/
 
+#ifndef Adafruit_NFCShield_I2C_h
+#define Adafruit_NFCShield_I2C_h
+
 #if ARDUINO >= 100
  #include "Arduino.h"
 #else
@@ -198,3 +201,5 @@ class Adafruit_NFCShield_I2C{
   void    wiresendcommand(uint8_t* cmd, uint8_t cmdlen);
   boolean waitUntilReady(uint16_t timeout);
 };
+
+#endif
