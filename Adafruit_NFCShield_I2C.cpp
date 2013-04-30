@@ -598,12 +598,19 @@ uint8_t Adafruit_NFCShield_I2C::mifareclassic_AuthenticateBlock (uint8_t * uid, 
 
   // Read the response packet
   wirereaddata(pn532_packetbuffer, 12);
-  // ToDo: How to check if the response is valid and we are authenticated???
-  // #ifdef PN532DEBUG
-  //   Serial.println("Authentification failed%s");
-  // #endif
-  // return 0;
-
+  
+  // Check if the response is valid and we are authenticated???
+  // for an auth success it should be bytes 5-7: 0xD5 0x41 0x00
+  // Mifare auth error is technically byte 7: 0x14 but anything other and 0x00 is not good
+  if (pn532_packetbuffer[7] != 0x00)
+  {
+    #ifdef PN532DEBUG
+    Serial.print("Authentification failed: ");
+    Adafruit_PN532::PrintHexChar(pn532_packetbuffer, 12);
+    #endif
+    return 0;
+  }  
+  
   return 1;
 }
 
