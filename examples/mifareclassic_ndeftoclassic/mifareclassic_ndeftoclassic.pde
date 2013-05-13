@@ -78,12 +78,8 @@ void loop(void) {
   uint8_t blockBuffer[16];                  // Buffer to store block contents
   uint8_t blankAccessBits[3] = { 0xff, 0x07, 0x80 };
   uint8_t idx = 0;
-  uint8_t numOfSector = 16;                 // Stick to Mifare Classic 1K for not (16 4-block sectors)
+  uint8_t numOfSector = 16;                 // Assume Mifare Classic 1K for now (16 4-block sectors)
   
-  // Use the default NDEF keys (these would have have set by mifareclassic_formatndef.pde!)
-  uint8_t keya[6] = { 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5 };
-  uint8_t keyb[6] = { 0xD3, 0xF7, 0xD3, 0xF7, 0xD3, 0xF7 };
-
   Serial.println("Place your NDEF formatted Mifare Classic 1K card on the reader");
   Serial.println("and press any key to continue ...");
   
@@ -114,19 +110,7 @@ void loop(void) {
     }    
     
     Serial.println("Seems to be a Mifare Classic card (4 byte UID)");
-
-//    // Check if this is an NDEF card by trying to authenticate the MAD sector
-//    // using key A and 0xA0 0xA1 0xA2 0xA3 0xA4 0xA5
-//    success = nfc.mifareclassic_AuthenticateBlock (uid, uidLength, 4, 0, keya);
-//    if (!success)
-//    {
-//      Serial.println("Authentication failed with the public NDEF key ...");
-//      Serial.println("This doesn't appear to be an NFC Forum/NDEF tag!");
-//      return;
-//    }
-//    
-//    Serial.println("Seems to be an NFC Forum tag (MAD sector authentication succeeded)");
-
+    Serial.println("");
     Serial.println("Reformatting card for Mifare Classic (please don't touch it!) ... ");
 
     // Now run through the card sector by sector
@@ -146,7 +130,7 @@ void loop(void) {
         memset(blockBuffer, 0, sizeof(blockBuffer));
         if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 3, blockBuffer)))
         {
-          Serial.print("Unable to wrote to sector "); Serial.println("numOfSector");
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
           return;
         }
       }
@@ -155,7 +139,7 @@ void loop(void) {
         memset(blockBuffer, 0, sizeof(blockBuffer));
         if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 2, blockBuffer)))
         {
-          Serial.print("Unable to wrote to sector "); Serial.println("numOfSector");
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
           return;
         }
       }
@@ -164,19 +148,19 @@ void loop(void) {
         memset(blockBuffer, 0, sizeof(blockBuffer));
         if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 3, blockBuffer)))
         {
-          Serial.print("Unable to wrote to sector "); Serial.println("numOfSector");
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
           return;
         }
         if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 2, blockBuffer)))
         {
-          Serial.print("Unable to wrote to sector "); Serial.println("numOfSector");
+          Serial.print("Unable to write to sector "); Serial.println(numOfSector);
           return;
         }
       }
       memset(blockBuffer, 0, sizeof(blockBuffer));
       if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)) - 1, blockBuffer)))
       {
-        Serial.print("Unable to wrote to sector "); Serial.println("numOfSector");
+        Serial.print("Unable to write to sector "); Serial.println(numOfSector);
         return;
       }
       
@@ -189,7 +173,7 @@ void loop(void) {
       // Step 4: Write the trailer block
       if (!(nfc.mifareclassic_WriteDataBlock((BLOCK_NUMBER_OF_SECTOR_TRAILER(idx)), blockBuffer)))
       {
-        Serial.print("Unable to write trailer block of sector "); Serial.println("numOfSector");
+        Serial.print("Unable to write trailer block of sector "); Serial.println(numOfSector);
         return;
       }
     }
