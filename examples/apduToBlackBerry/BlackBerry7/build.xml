@@ -1,0 +1,18 @@
+<project default="all">
+	<property name="jde.path" value="c:/Program Files/Research In Motion/BlackBerry JDE 7.1.0" />
+	<target name="all" depends="sign,deploy">
+	</target>
+
+	<target name="sign">
+		<java failonerror="true" fork="true"
+			jar="c:/Program Files/Research In Motion/BlackBerry JDE 7.1.0/bin/SignatureTool.jar" args="-p s0ftc0ck -a -c deliverables/Standard/7.0.0/TargetEmulation.cod">
+		</java>
+	</target>
+	<target name="deploy">
+		<exec executable="${jde.path}/bin/JavaLoader.exe">
+			<arg value="-wpasscc" />
+			<arg value="load" />
+			<arg value="deliverables/Standard/7.0.0/TargetEmulation.cod" />
+		</exec>
+	</target>
+</project>
