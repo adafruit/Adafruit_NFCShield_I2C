@@ -47,6 +47,11 @@
 #endif
 
 #include <Wire.h>
+#ifdef __AVR__
+ #define WIRE Wire
+#else // Arduino Due
+ #define WIRE Wire1
+#endif
 
 #include "Adafruit_NFCShield_I2C.h"
 
@@ -70,9 +75,9 @@ byte pn532_packetbuffer[PN532_PACKBUFFSIZ];
 static inline void wiresend(uint8_t x) 
 {
   #if ARDUINO >= 100
-    Wire.write((uint8_t)x);
+    WIRE.write((uint8_t)x);
   #else
-    Wire.send(x);
+    WIRE.send(x);
   #endif
 }
 
@@ -84,9 +89,9 @@ static inline void wiresend(uint8_t x)
 static inline uint8_t wirerecv(void) 
 {
   #if ARDUINO >= 100
-    return Wire.read();
+    return WIRE.read();
   #else
-    return Wire.receive();
+    return WIRE.receive();
   #endif
 }
 
@@ -112,7 +117,7 @@ Adafruit_NFCShield_I2C::Adafruit_NFCShield_I2C(uint8_t irq, uint8_t reset) {
 */
 /**************************************************************************/
 void Adafruit_NFCShield_I2C::begin() {
-  Wire.begin();
+  WIRE.begin();
 
   // Reset the PN532  
   digitalWrite(_reset, HIGH);
@@ -963,7 +968,7 @@ void Adafruit_NFCShield_I2C::wirereaddata(uint8_t* buff, uint8_t n) {
   Serial.print("Reading: ");
 #endif
   // Start read (n+1 to take into account leading 0x01 with I2C)
-  Wire.requestFrom((uint8_t)PN532_I2C_ADDRESS, (uint8_t)(n+2));
+  WIRE.requestFrom((uint8_t)PN532_I2C_ADDRESS, (uint8_t)(n+2));
   // Discard the leading 0x01
   wirerecv();
   for (uint8_t i=0; i<n; i++) {
@@ -1003,7 +1008,7 @@ void Adafruit_NFCShield_I2C::wiresendcommand(uint8_t* cmd, uint8_t cmdlen) {
   delay(2);     // or whatever the delay is for waking up the board
 
   // I2C START
-  Wire.beginTransmission(PN532_I2C_ADDRESS);
+  WIRE.beginTransmission(PN532_I2C_ADDRESS);
   checksum = PN532_PREAMBLE + PN532_PREAMBLE + PN532_STARTCODE2;
   wiresend(PN532_PREAMBLE);
   wiresend(PN532_PREAMBLE);
@@ -1036,7 +1041,7 @@ void Adafruit_NFCShield_I2C::wiresendcommand(uint8_t* cmd, uint8_t cmdlen) {
   wiresend(PN532_POSTAMBLE);
   
   // I2C STOP
-  Wire.endTransmission();
+  WIRE.endTransmission();
 
 #ifdef PN532DEBUG
   Serial.print(" 0x"); Serial.print(~checksum, HEX);
