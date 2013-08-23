@@ -611,7 +611,7 @@ uint8_t Adafruit_NFCShield_I2C::mifareclassic_AuthenticateBlock (uint8_t * uid, 
   {
     #ifdef PN532DEBUG
     Serial.print("Authentification failed: ");
-    Adafruit_PN532::PrintHexChar(pn532_packetbuffer, 12);
+    Adafruit_NFCShield_I2C::PrintHexChar(pn532_packetbuffer, 12);
     #endif
     return 0;
   }  
