@@ -14,7 +14,7 @@ Written by Limor Fried/Ladyada & Kevin Townsend for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
 
-To download. click the DOWNLOADS button in the top right corner, rename
+To download: click the ZIP button above, rename
 the uncompressed folder Adafruit_NFCShield_I2C. Check that the
 Adafruit_NFCShield_I2C folder contains Adafruit_NFCShield_I2C.cpp and
 Adafruit_NFCShield_I2C.h
