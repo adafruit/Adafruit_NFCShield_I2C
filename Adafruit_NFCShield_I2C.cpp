@@ -47,7 +47,7 @@
 #endif
 
 #include <Wire.h>
-#ifdef __AVR__
+#if defined(__AVR__) || defined(__i386__) //compatibility with Intel Galileo
  #define WIRE Wire
 #else // Arduino Due
  #define WIRE Wire1
