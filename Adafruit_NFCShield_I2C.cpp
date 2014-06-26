@@ -801,7 +801,7 @@ uint8_t Adafruit_NFCShield_I2C::mifareclassic_WriteNDEFURI (uint8_t sectorNumber
     memcpy (sectorbuffer1+9, url, len);
     sectorbuffer2[0] = 0xFE;
   }
-  else if ((len > 7) || (len <= 22))
+  else if ((len > 7) && (len <= 22))
   {
     // Url fits in two blocks
     memcpy (sectorbuffer1+9, url, 7);
