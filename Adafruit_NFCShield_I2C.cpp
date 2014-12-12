@@ -443,12 +443,12 @@ boolean Adafruit_NFCShield_I2C::setPassiveActivationRetries(uint8_t maxRetries) 
     @returns 1 if everything executed properly, 0 for an error
 */
 /**************************************************************************/
-boolean Adafruit_NFCShield_I2C::readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint8_t * uidLength) {
+boolean Adafruit_NFCShield_I2C::readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint8_t * uidLength, uint16_t timeout) {
   pn532_packetbuffer[0] = PN532_COMMAND_INLISTPASSIVETARGET;
   pn532_packetbuffer[1] = 1;  // max 1 cards at once (we can set this to 2 later)
   pn532_packetbuffer[2] = cardbaudrate;
   
-  if (! sendCommandCheckAck(pn532_packetbuffer, 3))
+  if (! sendCommandCheckAck(pn532_packetbuffer, 3, timeout))
   {
     #ifdef PN532DEBUG
 	Serial.println(F("No card(s) read"));
@@ -461,9 +461,19 @@ boolean Adafruit_NFCShield_I2C::readPassiveTargetID(uint8_t cardbaudrate, uint8_
   #ifdef PN532DEBUG
   Serial.println(F("Waiting for IRQ (indicates card presence)"));
   #endif
+  uint16_t timer = 0;
   while (wirereadstatus() != PN532_I2C_READY)
   {
-	delay(10);
+    if (timeout != 0) {
+      timer+=10;
+      if (timer > timeout) {
+        #ifdef PN532DEBUG
+        Serial.println("IRQ Timeout");
+        #endif
+        return 0x0;
+      }
+    }
+    delay(10);
   }
 
   #ifdef PN532DEBUG

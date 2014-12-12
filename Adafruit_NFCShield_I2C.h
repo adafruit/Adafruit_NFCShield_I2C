@@ -169,7 +169,8 @@ class Adafruit_NFCShield_I2C{
   
   // ISO14443A functions
   boolean inListPassiveTarget();
-  boolean readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint8_t * uidLength);
+  boolean readPassiveTargetID(uint8_t cardbaudrate, uint8_t * uid, uint8_t * uidLength, uint16_t timeout = 0); //timeout 0 means no timeout - will block forever.
+
   boolean inDataExchange(uint8_t * send, uint8_t sendLength, uint8_t * response, uint8_t * responseLength);
   
   // Mifare Classic functions
