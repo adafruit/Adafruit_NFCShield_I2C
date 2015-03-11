@@ -1,9 +1,11 @@
 *** DEPRECATED! ***
 
-This library is now deprecated and will not be maintained.  The NFC shield and I2C
-communication logic has been merged into the Adafruit-PN532 library with no loss
-of functionality.  Please see this page for details on installing and using the
-Adafruit-PN532 library in place of this Adafruit_NFCShield_I2C library.
+This library is now deprecated and will not be maintained.  The NFC shield
+and I2C communication logic has been merged into the Adafruit-PN532 library
+with no loss of functionality.  Please see this page for details on 
+installing and using the Adafruit-PN532 library in place of this 
+Adafruit_NFCShield_I2C library:
+  https://learn.adafruit.com/adafruit-pn532-rfid-nfc/arduino-library
 
 *** DEPRECATED! ***
 
