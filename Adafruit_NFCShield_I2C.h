@@ -98,7 +98,7 @@
 
 #define PN532_MIFARE_ISO14443A              (0x00)
 
-// Mifare Commands
+// Mifare (Standard) Commands
 #define MIFARE_CMD_AUTH_A                   (0x60)
 #define MIFARE_CMD_AUTH_B                   (0x61)
 #define MIFARE_CMD_READ                     (0x30)
@@ -107,6 +107,9 @@
 #define MIFARE_CMD_DECREMENT                (0xC0)
 #define MIFARE_CMD_INCREMENT                (0xC1)
 #define MIFARE_CMD_STORE                    (0xC2)
+
+// Mifare (Ultralight) Commands
+#define MIFARE_ULTRALIGHT_CMD_WRITE         (0xA2)
 
 // Prefixes for NDEF Records (to identify record type)
 #define NDEF_URIPREFIX_NONE                 (0x00)
@@ -184,6 +187,7 @@ class Adafruit_NFCShield_I2C{
   
   // Mifare Ultralight functions
   uint8_t mifareultralight_ReadPage (uint8_t page, uint8_t * buffer);
+  uint8_t mifareultralight_WritePage (uint8_t page, uint8_t * data);
   
   // Help functions to display formatted text
   static void PrintHex(const byte * data, const uint32_t numBytes);
